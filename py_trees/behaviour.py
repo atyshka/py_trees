@@ -84,6 +84,13 @@ class Behaviour(abc.ABC):
         self.feedback_message = ""  # useful for debugging, or human readable updates, but not necessary to implement
         self.blackbox_level = common.BlackBoxLevel.NOT_A_BLACKBOX
 
+    def __getstate__(self) -> typing.Dict:
+        return {k:v for k,v in self.__dict__.items() if k != "iterator"}
+
+    def __setstate__(self, state: typing.Dict) -> None:
+        self.__dict__.update(state)
+        self.iterator = self.tick()
+
     ############################################
     # User Customisable Callbacks
     ############################################
